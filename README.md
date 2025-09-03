@@ -361,7 +361,7 @@ This README demonstrates how to visualize and edit a settings object graph where
             return t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>));
         }
 
-        /// Determines the key and value types of a dictionary type.
+        // Determines the key and value types of a dictionary type.
         private static (Type keyType, Type valueType) GetDictTypes(Type t)
         {
             var ide = t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IDictionary<,>)
