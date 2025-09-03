@@ -103,8 +103,8 @@ This README demonstrates how to visualize and edit a settings object graph where
 ## DataToViewProjector
 
 ```csharp
-    /// Provides functionality to project a hierarchical settings object graph into a flat, self-referencing list
-    /// suitable for use in tree-like UI components. This class supports complex objects, collections 
+    // Provides functionality to project a hierarchical settings object graph into a flat, self-referencing list
+    // suitable for use in tree-like UI components. This class supports complex objects, collections 
     public static class DataToViewProjector
     {
         private static readonly HashSet<Type> _leafSet = new(new[]
