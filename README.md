@@ -142,7 +142,7 @@ This README demonstrates how to visualize and edit a settings object graph where
             return new BindingList<TreeNodeViewModel>(nodes);
         }
 
-        /// Recursively processes an object and adds its representation to a list of <see cref="TreeNodeViewModel"/> nodes.
+        // Recursively processes an object and adds its representation to a list of TreeNodeViewModel nodes.
         private static void AddAnyRecursive(List<TreeNodeViewModel> nodes, ref int nextId, int parentId,
                                             string name, object obj, object owner, PropertyInfo ownerProp)
         {
