@@ -262,7 +262,7 @@ This README demonstrates how to visualize and edit a settings object graph where
             }
         }
 
-        /// Adds a dictionary object to the specified list of tree node view models, representing its structure
+        // Adds a dictionary object to the specified list of tree node view models, representing its structure
         private static void AddDictionary(List<TreeNodeViewModel> nodes, ref int nextId, int parentId, string name, object dictObj)
         {
             var t = dictObj.GetType();
