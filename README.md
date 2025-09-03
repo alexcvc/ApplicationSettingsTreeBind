@@ -24,26 +24,13 @@ This README demonstrates how to visualize and edit a settings object graph where
 ## DataModel (settings)
 
 ```csharp
-    /// <summary>
-    /// Represents the application settings, including network, user interface, and logging configurations.
-    /// </summary>
     public readonly struct DataModel
     {
-        /// <summary>
-        /// Gets or initializes the network settings for the application, 
-        /// including configurations such as host, port, SSL usage, and connection limits.
-        /// </summary>
         public NetworkSettings Network { get; init; }
-        /// <summary>
-        /// 
-        /// </summary>
         public UiSettings Ui { get; init; }
         public LoggingSettings Logging { get; init; }
     }
 
-    /// <summary>
-    /// Represents the network settings for the application, including host and port configuration.
-    /// </summary>
     public class NetworkSettings
     {
         private string RemoteIp = "127.0.0.1";
@@ -62,19 +49,12 @@ This README demonstrates how to visualize and edit a settings object graph where
         }
     }
 
-    /// <summary>
-    /// Represents the user interface settings for the application.
-    /// </summary>
     public class UiSettings
     {
         public bool DarkMode { get; set; } = true;
         public double Scale { get; set; } = 1.0;
     }
 
-    /// <summary>
-    /// Represents the logging settings for the application, including log level, file path, 
-    /// associated tags, and additional configuration options.
-    /// </summary>
     public class LoggingSettings
     {
         public string Level { get; set; } = "Info";
@@ -93,9 +73,7 @@ This README demonstrates how to visualize and edit a settings object graph where
 ## Bindable node view-model
 
 ```csharp
-    /// <summary>
     /// Represents a view model for a tree node, designed to be used as a data record in a TreeList control.
-    /// </summary>
     public class TreeNodeViewModel
     {
         /// <summary>
@@ -125,12 +103,8 @@ This README demonstrates how to visualize and edit a settings object graph where
 ## DataToViewProjector
 
 ```csharp
-    /// <summary>
     /// Provides functionality to project a hierarchical settings object graph into a flat, self-referencing list
     /// suitable for use in tree-like UI components. This class supports complex objects, collections 
-    /// (e.g., <see cref="IEnumerable"/> and <see cref="IDictionary"/>), and handles primitive types, enums, 
-    /// strings, and other displayable types by converting them into string representations.
-    /// </summary>
     public static class DataToViewProjector
     {
         private static readonly HashSet<Type> _leafSet = new(new[]
@@ -140,19 +114,6 @@ This README demonstrates how to visualize and edit a settings object graph where
             typeof(DateTime), typeof(TimeSpan), typeof(Guid), typeof(Uri)
         });
 
-        /// <summary>
-        /// Transforms a hierarchical <see cref="DataModel"/> object into a flat collection of
-        /// <see cref="TreeNodeViewModel"/> instances. This method simplifies the visualization
-        /// of nested settings in tree-structured UI components.
-        /// </summary>
-        /// <param name="root">
-        /// The root <see cref="DataModel"/> object that encapsulates the hierarchical settings
-        /// structure to be converted into a flat representation.
-        /// </param>
-        /// <returns>
-        /// A <see cref="BindingList{T}"/> containing <see cref="TreeNodeViewModel"/> objects,
-        /// each representing a node in the flattened settings structure.
-        /// </returns>
         public static BindingList<TreeNodeViewModel> ToFlatNodes(DataModel root)
         {
             var nodes = new List<TreeNodeViewModel>();
@@ -181,22 +142,7 @@ This README demonstrates how to visualize and edit a settings object graph where
             return new BindingList<TreeNodeViewModel>(nodes);
         }
 
-        /// <summary>
         /// Recursively processes an object and adds its representation to a list of <see cref="TreeNodeViewModel"/> nodes.
-        /// </summary>
-        /// <param name="nodes">The list of nodes to which the processed object and its properties will be added.</param>
-        /// <param name="nextId">A reference to the next available unique identifier for the nodes.</param>
-        /// <param name="parentId">The identifier of the parent node.</param>
-        /// <param name="name">The name of the current object or property being processed.</param>
-        /// <param name="obj">The object to process. This can be a leaf, a collection, a dictionary, or a complex object.</param>
-        /// <param name="owner">The parent object that contains the current object or property. This is used for write-back scenarios.</param>
-        /// <param name="ownerProp">The property information of the current object within its owner. This is used for write-back scenarios.</param>
-        /// <remarks>
-        /// This method determines the type of the provided object and processes it accordingly:
-        /// - Leaf types are added as individual nodes.
-        /// - Collections and dictionaries are processed recursively, with their elements or entries added as child nodes.
-        /// - Complex objects are processed by iterating over their public instance properties.
-        /// </remarks>
         private static void AddAnyRecursive(List<TreeNodeViewModel> nodes, ref int nextId, int parentId,
                                             string name, object obj, object owner, PropertyInfo ownerProp)
         {
@@ -316,29 +262,7 @@ This README demonstrates how to visualize and edit a settings object graph where
             }
         }
 
-        /// <summary>
         /// Adds a dictionary object to the specified list of tree node view models, representing its structure
-        /// and entries in a hierarchical manner.
-        /// </summary>
-        /// <param name="nodes">
-        /// The list of <see cref="TreeNodeViewModel"/> instances to which the dictionary and its entries will be added.
-        /// </param>
-        /// <param name="nextId">
-        /// A reference to the next available unique identifier for tree nodes. This value will be incremented as nodes are added.
-        /// </param>
-        /// <param name="parentId">
-        /// The identifier of the parent node under which the dictionary will be added.
-        /// </param>
-        /// <param name="name">
-        /// The display name of the dictionary node.
-        /// </param>
-        /// <param name="dictObj">
-        /// The dictionary object to be added. It must implement <see cref="IDictionary"/>.
-        /// </param>
-        /// <remarks>
-        /// This method recursively processes the dictionary's entries, adding each key-value pair as child nodes.
-        /// Keys are represented as read-only leaf nodes, while values are further processed to determine their structure.
-        /// </remarks>
         private static void AddDictionary(List<TreeNodeViewModel> nodes, ref int nextId, int parentId, string name, object dictObj)
         {
             var t = dictObj.GetType();
@@ -406,18 +330,7 @@ This README demonstrates how to visualize and edit a settings object graph where
 
         // helpers
 
-        /// <summary>
         /// Determines whether the specified <see cref="Type"/> is considered a leaf type.
-        /// </summary>
-        /// <param name="t">The <see cref="Type"/> to evaluate.</param>
-        /// <returns>
-        /// <see langword="true"/> if the specified type is a leaf type (e.g., primitive, enum, string, or other simple types);
-        /// otherwise, <see langword="false"/>.
-        /// </returns>
-        /// <remarks>
-        /// A leaf type is a type that does not require further decomposition into child nodes in a hierarchical structure.
-        /// This includes primitive types, enums, strings, and other types that can be directly represented as a value.
-        /// </remarks>
         private static bool IsLeafType(Type t)
         {
             if (t.IsEnum) return true;
@@ -425,33 +338,15 @@ This README demonstrates how to visualize and edit a settings object graph where
             return Type.GetTypeCode(t) != TypeCode.Object; // numeric primitives etc.
         }
 
-        /// <summary>
         /// Determines whether the specified <see cref="Type"/> is a nullable type and, if so, 
         /// retrieves the underlying type of the nullable type.
-        /// </summary>
-        /// <param name="t">The <see cref="Type"/> to evaluate.</param>
-        /// <param name="underlying">
-        /// When this method returns, contains the underlying type if <paramref name="t"/> is a nullable type; 
-        /// otherwise, <c>null</c>. This parameter is passed uninitialized.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if <paramref name="t"/> is a nullable type; otherwise, <c>false</c>.
-        /// </returns>
         private static bool IsNullable(Type t, out Type underlying)
         {
             underlying = Nullable.GetUnderlyingType(t);
             return underlying != null;
         }
 
-        /// <summary>
         /// Determines whether the specified <see cref="Type"/> is an enumerable type 
-        /// (i.e., implements <see cref="IEnumerable"/>) but is not a <see cref="string"/> or a dictionary type.
-        /// </summary>
-        /// <param name="t">The <see cref="Type"/> to evaluate.</param>
-        /// <returns>
-        /// <see langword="true"/> if the specified type is an enumerable type but not a <see cref="string"/> or a dictionary;
-        /// otherwise, <see langword="false"/>.
-        /// </returns>
         private static bool IsEnumerableButNotString(Type t)
         {
             if (t == typeof(string)) return false;
@@ -459,32 +354,14 @@ This README demonstrates how to visualize and edit a settings object graph where
             return typeof(IEnumerable).IsAssignableFrom(t);
         }
 
-        /// <summary>
         /// Determines whether the specified <see cref="Type"/> represents a dictionary.
-        /// </summary>
-        /// <param name="t">The <see cref="Type"/> to evaluate.</param>
-        /// <returns>
-        /// <see langword="true"/> if the specified <see cref="Type"/> implements <see cref="IDictionary"/> 
-        /// or a generic dictionary interface (e.g., <see cref="IDictionary{TKey, TValue}"/>); otherwise, <see langword="false"/>.
-        /// </returns>
         private static bool IsDictionary(Type t)
         {
             if (typeof(IDictionary).IsAssignableFrom(t)) return true;
             return t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>));
         }
 
-        /// <summary>
         /// Determines the key and value types of a dictionary type.
-        /// </summary>
-        /// <param name="t">The <see cref="Type"/> of the dictionary to analyze.</param>
-        /// <returns>
-        /// A tuple containing the key type and value type of the dictionary. 
-        /// If the dictionary is non-generic, both types default to <see cref="object"/>.
-        /// </returns>
-        /// <remarks>
-        /// This method supports both generic dictionaries (e.g., <see cref="IDictionary{TKey, TValue}"/>)
-        /// and non-generic dictionaries (e.g., <see cref="IDictionary"/>).
-        /// </remarks>
         private static (Type keyType, Type valueType) GetDictTypes(Type t)
         {
             var ide = t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IDictionary<,>)
@@ -498,15 +375,6 @@ This README demonstrates how to visualize and edit a settings object graph where
             return (typeof(object), typeof(object)); // non-generic IDictionary
         }
 
-        /// <summary>
-        /// Determines the name of the element type for a given enumerable type.
-        /// </summary>
-        /// <param name="enumerableType">The <see cref="Type"/> of the enumerable object.</param>
-        /// <returns>
-        /// A <see cref="string"/> representing the name of the element type contained within the enumerable.
-        /// If the type is an array, the element type name is returned. If the type implements 
-        /// <see cref="IEnumerable{T}"/>, the generic argument type name is returned. If no element type can be determined, "Object" is returned.
-        /// </returns>
         private static string GetElementTypeName(Type enumerableType)
         {
             if (enumerableType is { IsArray: true })
@@ -520,16 +388,6 @@ This README demonstrates how to visualize and edit a settings object graph where
             return "Object";
         }
 
-        /// <summary>
-        /// Iterates through an enumerable object, returning each item and its type.
-        /// </summary>
-        /// <param name="enumerableObj">An object implementing <see cref="IEnumerable"/>.</param>
-        /// <returns>
-        /// A sequence of tuples containing each item and its <see cref="Type"/>.
-        /// </returns>
-        /// <exception cref="InvalidCastException">
-        /// Thrown if <paramref name="enumerableObj"/> does not implement <see cref="IEnumerable"/>.
-        /// </exception>
         private static IEnumerable<(object Item, Type ItemType)> IterateEnumerable(object enumerableObj)
         {
             if (enumerableObj is not IEnumerable enumerable)
