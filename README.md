@@ -73,7 +73,7 @@ This README demonstrates how to visualize and edit a settings object graph where
 ## Bindable node view-model
 
 ```csharp
-    /// Represents a view model for a tree node, designed to be used as a data record in a TreeList control.
+    // Represents a view model for a tree node, designed to be used as a data record in a TreeList control.
     public class TreeNodeViewModel
     {
         /// <summary>
