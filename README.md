@@ -354,7 +354,7 @@ This README demonstrates how to visualize and edit a settings object graph where
             return typeof(IEnumerable).IsAssignableFrom(t);
         }
 
-        /// Determines whether the specified <see cref="Type"/> represents a dictionary.
+        // Determines whether the specified Type represents a dictionary.
         private static bool IsDictionary(Type t)
         {
             if (typeof(IDictionary).IsAssignableFrom(t)) return true;
